@@ -28,7 +28,16 @@ exit 1
 fi
 cd ${startdir}
 for i in `ls *.jpg`; do
-identify -format "%wx%h\n" *.jpg > info.txt;
+identify -format "%wx%h" 1.jpg > info.txt;
+tr 'x' '\n' < info.txt > result.txt;
+fileweight=`head -n 1 result.txt`;
+fileheight=`tail -n 1 result.txt`;
+if [ $fileweight -gt $weight -a $fileheight -gt $height ];
+then
 convert -resize ${weight}x${height}! $i ../${finaldir}/$i;
+echo "Конвертация изображения(${i}) прошла успешно!"
+else
+echo "Изображения(${i}) меньше или равны заданным размерам.";
+fi
 done
 fi
